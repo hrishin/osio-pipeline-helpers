@@ -48,6 +48,7 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
+
     echo "${config}"
     currentUser = getCurrentUser()
 
