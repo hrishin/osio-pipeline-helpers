@@ -68,7 +68,7 @@ def call(Map parameters = [:], body) {
        done
 
        #Remove dc from currentUser and
-       oc delete dc nodejs-health-check -n \$currentUser
+       oc delete dc nodejs-health-check -n ${currentUser}
 
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
