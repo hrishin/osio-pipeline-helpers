@@ -48,7 +48,7 @@ def call(Map parameters = [:], body) {
 
     sleep(time: 10, unit: "MINUTES")
 
-    currentProject = $(oc get project -o go-template='{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'|sed -n '/-jenkins/{ s/-jenkins//;p;}')
+    currentProject = sh "$(oc get project -o go-template='{{range .items}}{{.metadata.name}}{{\"\n\"}}{{end}}'|sed -n '/-jenkins/{ s/-jenkins//;p;}')""
 
 
     print "DEBUG: parameter foo = ${config}"
