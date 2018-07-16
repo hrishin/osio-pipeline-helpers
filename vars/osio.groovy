@@ -52,7 +52,7 @@ def call(Map parameters = [:], body) {
     currentUser = getCurrentUser()
 
     sh """
-       for i in ${currentUser} ${currentUser}}-{stage,run};do
+       for i in ${currentUser} ${currentUser}}-stage ${currentUser}}-run;do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=https://github.com/chmouel/nodejs-health-check | \
             oc apply -f- -n \$i
        done
