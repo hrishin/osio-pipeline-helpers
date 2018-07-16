@@ -48,13 +48,21 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
-
+    echo "${config.githubRepo}"
     currentUser = getCurrentUser()
 
     sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=https://github.com/chmouel/nodejs-health-check | \
             oc apply -f- -n \$i
+       done
+
+       #Remove dc from currentUser and
+       oc delete dc nodejs-health-check -n \$currentUser
+
+       #TODO(make it smarter)
+       for i in ${currentUser}-{stage,run};do
+        oc delete bc nodejs-health-check -n \$i
        done
     """
 
