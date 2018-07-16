@@ -40,6 +40,14 @@ def getCurrentUser() {
     ).trim()
 }
 
+def getCurrentRepo() {
+  return sh (
+    script: "git config remote.origin.url",
+    returnStdout: true
+    ).trim()
+}
+
+
 def call(Map parameters = [:], body) {
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
@@ -51,10 +59,11 @@ def call(Map parameters = [:], body) {
 
     echo "${config}"
     currentUser = getCurrentUser()
+    currentGitRepo = getCurrentRepo()
 
     sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
-          oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=https://github.com/chmouel/nodejs-health-check | \
+          oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
             oc apply -f- -n \$i
        done
 
