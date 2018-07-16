@@ -48,7 +48,7 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
-    echo "${config.githubRepo}"
+    echo "${config}"
     currentUser = getCurrentUser()
 
     sh """
