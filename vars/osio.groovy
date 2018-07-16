@@ -57,6 +57,8 @@ def call(Map parameters = [:], body) {
             oc apply -f- -n \$i
        done
     """
+
+    sleep(time: 2, unit: "MINUTES")
   }
 
   // try {
