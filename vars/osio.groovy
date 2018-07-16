@@ -66,7 +66,6 @@ def call(Map parameters = [:], body) {
        done
     """
 
-    sleep(time: 2, unit: "MINUTES")
   }
 
   // try {
