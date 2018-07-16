@@ -34,7 +34,10 @@ def deploy(_environ) {
 }
 
 def getCurrentUser() {
-
+  return sh (
+    script: """oc whoami|awk -F ":" '{ gsub(/-jenkins/,"", \$3);print \$3;}'""",
+    returnStdout: true
+    ).trim()
 }
 
 def call(Map parameters = [:], body) {
@@ -46,19 +49,14 @@ def call(Map parameters = [:], body) {
     checkout scm;
 
 
-    sleep(time: 10, unit: "MINUTES")
+    currentUser = getCurrentUser()
 
-    sh "oc get project -o go-template='{{range .items}}{{.metadata.name}}{{\"\n\"}}{{end}}'|sed -n '/-jenkins/{ s/-jenkins//;p;}'
-
-
-    print "DEBUG: parameter foo = ${config}"
-
-    sh 'oc get project -o json|jq ".items[] | .metadata.name"'
-    // sh """
-    //    for i in ${currentProject} ${currentProject}}-{stage,run};do
-    //       oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=https://github.com/chmouel/nodejs-health-check | \
-    //         oc apply -f- -n cboudjna-preview"
-
+    sh """
+       for i in ${currentUser} ${currentUser}}-{stage,run};do
+          oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=https://github.com/chmouel/nodejs-health-check | \
+            oc apply -f- -n \$i
+       done
+    """
   }
 
   // try {
