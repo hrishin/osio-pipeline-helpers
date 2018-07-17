@@ -65,7 +65,7 @@ def main() {
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
-    templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream").minus("runtime")
+    templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream").minus("runtime").trim()
     templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
