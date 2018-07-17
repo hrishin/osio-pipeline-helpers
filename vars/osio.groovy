@@ -111,6 +111,7 @@ def call(body) {
   body()
 
   def label = pipelineParams.get('label', 'maven')
+  println(label)
   return
 
   //TODO: parameters
