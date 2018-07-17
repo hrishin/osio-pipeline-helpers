@@ -67,6 +67,7 @@ def call(Map parameters = [:], body) {
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
+    templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream")
 
     stage('Creating configuration') {
       sh """
@@ -91,7 +92,7 @@ def call(Map parameters = [:], body) {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}")
+      deployEnvironment("stage", "${currentUser}", "${templateIS}")
       //askForInput()
     }
   }
