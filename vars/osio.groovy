@@ -52,7 +52,7 @@ def getCurrentRepo() {
     ).trim()
 }
 
-def getJsonFromTemplate(sourceRepository) {
+def test(sourceRepository) {
   return sh (
     script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository}",
     returnStdout: true
@@ -92,7 +92,7 @@ def main(params) {
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
 
-    jj = getJsonFromTemplate(currentGitRepo)
+    jj = test(currentGitRepo)
     templateDC = getJsonFromTemplate(jj, "DeploymentConfig")
     templateBC = getJsonFromTemplate(jj, "BuildConfig")
     templateISDest = getJsonFromTemplate(jj, "ImageStream")
