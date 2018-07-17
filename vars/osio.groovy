@@ -1,3 +1,5 @@
+def approvalTimeOutMinutes = 30;
+
 def askForInput() {
   def proceedMessage = """Would you like to promote to the next environment?
           """
@@ -63,7 +65,6 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
-
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
@@ -94,7 +95,7 @@ def call(Map parameters = [:], body) {
 
     stage('Deploy to staging') {
       deployEnvironment("stage", "${currentUser}", "${templateRoute}")
-      //askForInput()
+      askForInput()
     }
   }
 
