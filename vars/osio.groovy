@@ -91,11 +91,12 @@ def main(params) {
 
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
-    // TODO: What about if we have multiple DC/IS then we would have to humm improve this
-    templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
-    templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
-    templateISDest = getTemplateNameFromObject(currentGitRepo, "ImageStream")
-    templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
+
+    json = getJsonFromTemplate(currentGitRepo)
+    templateDC = getJsonFromTemplate(json, "DeploymentConfig")
+    templateBC = getJsonFromTemplate(json, "BuildConfig")
+    templateISDest = getJsonFromTemplate(json, "ImageStream")
+    templateRoute = getJsonFromTemplate(json, "Route")
 
     stage('Creating configuration') {
       sh """
