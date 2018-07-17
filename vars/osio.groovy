@@ -110,6 +110,7 @@ def call(Map parameters = [:], body) {
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
+  return
 
   def label = parameters.get('label', defaultLabel)
 
