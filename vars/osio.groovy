@@ -107,9 +107,6 @@ def call(Map parameters = [:], body) {
   def jobTimeOutHour = 1
   def defaultLabel = 'maven'
 
-  def config = [:]
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  body.delegate = config
   return
 
   def label = parameters.get('label', defaultLabel)
