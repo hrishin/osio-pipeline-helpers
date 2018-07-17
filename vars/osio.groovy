@@ -1,4 +1,5 @@
 def approvalTimeOutMinutes = 30;
+def jobTimeOutHour = 1
 
 def askForInput() {
   def proceedMessage = """Would you like to promote to the next environment?
@@ -57,11 +58,7 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
     ).trim()
 }
 
-def call(Map parameters = [:], body) {
-  def config = [:]
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  body.delegate = config
-
+def main() {
   node('nodejs') {
     checkout scm;
 
@@ -98,31 +95,24 @@ def call(Map parameters = [:], body) {
       askForInput()
     }
   }
+}
 
-  // try {
-  //   timestamps{
-  //     timeout(time: jobTimeOutHour, unit: 'HOURS') {
-  //       node('nodejs') {
-  //         stage('Build') {
-  //           openshiftBuild(buildConfig: "${APPLICATION_NAME}", showBuildLogs: 'true')
-  //         }
+def call(Map parameters = [:], body) {
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
 
-  //         stage('Deploy to staging') {
-  //           deploy("stage")
-  //           askForInput()
-  //         }
 
-  //         stage('Deploy to production') {
-  //           deploy("run")
-  //         }
-  //       }
-  //     }
-  //   }
-  // } catch (err) {
-  //   echo "in catch block"
-  //   echo "Caught: ${err}"
-  //   currentBuild.result = 'FAILURE'
-  //   throw err
-  // }
-
+  try {
+    timestamps{
+      timeout(time: jobTimeOutHour, unit: 'HOURS') {
+        main()
+      }
+    }
+  } catch (err) {
+    echo "in catch block"
+    echo "Caught: ${err}"
+    currentBuild.result = 'FAILURE'
+    throw err
+  }
 }
