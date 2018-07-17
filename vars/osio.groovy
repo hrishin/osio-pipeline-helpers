@@ -58,8 +58,9 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
 }
 
 def main(label) {
-  node(params.get(label)) {
+  node(params.get('label')) {
     checkout scm;
+    println(params.get('label'))
     return;
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
