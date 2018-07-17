@@ -66,7 +66,7 @@ def main(params) {
     // TODO: What about if we have multiple DC/IS then we would have to humm improve this
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
-    templateISDest = getTemplateNameFromObject(currentGitRepo, "ImageStream").minus("runtime").trim()
+    templateISDest = getTemplateNameFromObject(currentGitRepo, "ImageStream")
     templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
