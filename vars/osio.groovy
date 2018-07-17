@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 def askForInput() {
   //TODO: parameters
   def approvalTimeOutMinutes = 30;
