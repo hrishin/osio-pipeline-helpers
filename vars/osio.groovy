@@ -92,11 +92,11 @@ def main(params) {
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
 
-    json = getJsonFromTemplate(currentGitRepo)
-    templateDC = getJsonFromTemplate(json, "DeploymentConfig")
-    templateBC = getJsonFromTemplate(json, "BuildConfig")
-    templateISDest = getJsonFromTemplate(json, "ImageStream")
-    templateRoute = getJsonFromTemplate(json, "Route")
+    jj = getJsonFromTemplate(currentGitRepo)
+    templateDC = getJsonFromTemplate(jj, "DeploymentConfig")
+    templateBC = getJsonFromTemplate(jj, "BuildConfig")
+    templateISDest = getJsonFromTemplate(jj, "ImageStream")
+    templateRoute = getJsonFromTemplate(jj, "Route")
 
     stage('Creating configuration') {
       sh """
