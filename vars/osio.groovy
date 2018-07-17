@@ -111,14 +111,12 @@ def call(body) {
   body.delegate = pipelineParams
   body()
 
-  def label = pipelineParams.get('label', 'maven')
-
   //TODO: parameters
   def jobTimeOutHour = 1
   try {
     timestamps{
       timeout(time: jobTimeOutHour, unit: 'HOURS') {
-        main(params)
+        main(pipelineParams)
       }
     }
   } catch (err) {
