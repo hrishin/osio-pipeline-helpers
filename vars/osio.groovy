@@ -67,7 +67,7 @@ def call(Map parameters = [:], body) {
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
-    templateDC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
+    templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
 
     sleep(time: 10, unit: "MINUTES")
 
@@ -78,14 +78,13 @@ def call(Map parameters = [:], body) {
        done
 
        #Remove dc from currentUser and
-       oc delete dc nodejs-health-check -n ${currentUser}
+       oc delete dc ${templateDC} -n ${currentUser}
 
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
-        oc delete bc nodejs-health-check -n \$i
+        oc delete bc ${templateBC} -n \$i
        done
     """
-
   }
 
   // try {
