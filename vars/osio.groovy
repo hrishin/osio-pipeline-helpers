@@ -63,6 +63,7 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
+
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
