@@ -11,26 +11,27 @@ def askForInput() {
 }
 
 
-def deploy(_environ) {
+def deployEnvironment(_environ, application_name, imagestream) {
   environ = "-"  + _environ
-  // Populating istag to stage project
+
   try {
-    sh "JSON=\$(oc get -o json is/${APPLICATION_NAME} -n ${TARGET_USER}${environ});oc delete is/${APPLICATION_NAME} -n ${TARGET_USER}${environ} && echo \$JSON|oc create -n ${TARGET_USER}${environ} -f -;oc get istag -n ${TARGET_USER}${environ}"
+    sh "oc tag -n ${target_user}${environ} --alias=true ${target_user}/${imagestream}:latest ${imagestream}:latest"
   } catch (err) {
     error "Error running OpenShift command ${err}"
   }
 
-  openshiftDeploy(deploymentConfig: "${APPLICATION_NAME}", namespace: '${TARGET_USER}' + environ)
+  openshiftDeploy(deploymentConfig: "${application_name}", namespace: "${target_user}" + environ)
 
   try {
     ROUTE_PREVIEW = sh (
-      script: "oc get route -n ${TARGET_USER}${environ} ${APPLICATION_NAME} --template 'http://{{.spec.host}}'",
+      script: "oc get route -n ${target_user}${environ} ${application_name} --template 'http://{{.spec.host}}'",
       returnStdout: true
     ).trim()
     echo _environ.capitalize() + " URL: ${ROUTE_PREVIEW}"
   } catch (err) {
     error "Error running OpenShift command ${err}"
   }
+
 }
 
 def getCurrentUser() {
@@ -90,7 +91,7 @@ def call(Map parameters = [:], body) {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage")
+      deployEnvironment("stage", "${currentUser}")
       //askForInput()
     }
   }
