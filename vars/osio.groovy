@@ -63,6 +63,8 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
+    sleep(time: 10, unit: "MINUTES")
+
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
