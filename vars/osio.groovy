@@ -104,17 +104,17 @@ def main(label) {
   }
 }
 
-def call(Map parameters = [:], body) {
+def call(body) {
+  def pipelineParams= [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = pipelineParams
+  body()
+
+  def label = pipelineParams.get('label', 'maven')
+  return
+
   //TODO: parameters
   def jobTimeOutHour = 1
-  def defaultLabel = 'maven'
-
-  def config = [:]
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  body.delegate = config
-
-  def label = parameters.get('label', defaultLabel)
-
   try {
     timestamps{
       timeout(time: jobTimeOutHour, unit: 'HOURS') {
