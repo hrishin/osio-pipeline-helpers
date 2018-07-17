@@ -1,7 +1,6 @@
-def approvalTimeOutMinutes = 30;
-def jobTimeOutHour = 1
-
 def askForInput() {
+  //TODO: parameters
+  def approvalTimeOutMinutes = 30;
   def proceedMessage = """Would you like to promote to the next environment?
           """
   try {
@@ -98,6 +97,9 @@ def main() {
 }
 
 def call(Map parameters = [:], body) {
+  //TODO: parameters
+  def jobTimeOutHour = 1
+
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
