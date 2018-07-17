@@ -72,7 +72,7 @@ def call(Map parameters = [:], body) {
     sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
-            oc replace -f- -n \$i
+            oc apply -f- -n \$i
        done
 
        #Remove dc from currentUser and
