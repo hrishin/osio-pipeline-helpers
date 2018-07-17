@@ -17,7 +17,7 @@ def deployEnvironment(_environ, user, is, dc, route) {
   environ = "-"  + _environ
 
   try {
-    sh "oc tag -n ${user}${environ} --alias=true ${user}/runtime:latest runtime:latest"
+    sh "oc tag -n ${user}${environ} --alias=true ${user}/${is}:latest ${is}:latest"
   } catch (err) {
     error "Error running OpenShift command ${err}"
   }
