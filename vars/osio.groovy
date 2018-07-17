@@ -52,7 +52,6 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
     script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o jsonpath='{.items[?(@.kind == \"${objectName}\")].metadata.name}'",
     returnStdout: true
     ).trim()
-
 }
 
 def call(Map parameters = [:], body) {
@@ -67,6 +66,9 @@ def call(Map parameters = [:], body) {
     echo "${config}"
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
+    templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
+    templateDC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
+
     sleep(time: 10, unit: "MINUTES")
 
     sh """
