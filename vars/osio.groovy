@@ -107,14 +107,12 @@ def call(Map parameters = [:], body) {
   def jobTimeOutHour = 1
   def defaultLabel = 'maven'
   def label = parameters.get('label')
-  return
-
-  def label = parameters.get('label', defaultLabel)
 
   def stages = parameters.get('stage')
   println("Label: ${defaultLabel}")
   println("Label: ${label}")
   println("Parameters: ${stages}")
+  return
 
   try {
     timestamps{
