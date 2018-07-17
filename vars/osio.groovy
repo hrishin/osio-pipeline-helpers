@@ -62,14 +62,13 @@ def call(Map parameters = [:], body) {
   node('nodejs') {
     checkout scm;
 
-
-    echo "${config}"
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
 
-    sh """
+    stage('Creating configuration') {
+      sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
             oc apply -f- -n \$i
@@ -83,6 +82,13 @@ def call(Map parameters = [:], body) {
         oc delete bc ${templateBC} -n \$i
        done
     """
+    }
+
+    stage('Build') {
+             openshiftBuild(buildConfig: "${}", showBuildLogs: 'true')
+    }
+
+
   }
 
   // try {
