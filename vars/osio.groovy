@@ -57,7 +57,7 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
     ).trim()
 }
 
-def main(label) {
+def main(params) {
   node(params.get('label')) {
     checkout scm;
     println(params.get('label'))
