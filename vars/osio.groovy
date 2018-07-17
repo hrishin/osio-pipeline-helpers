@@ -84,11 +84,15 @@ def call(Map parameters = [:], body) {
     """
     }
 
-    stage('Build') {
-             openshiftBuild(buildConfig: "${}", showBuildLogs: 'true')
+    stage('Building application') {
+      openshiftBuild(buildConfig: "${templateBC}", showBuildLogs: 'true')
     }
 
 
+    stage('Deploy to staging') {
+      deployEnvironment("stage")
+      //askForInput()
+    }
   }
 
   // try {
