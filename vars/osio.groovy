@@ -106,7 +106,7 @@ def call(Map parameters = [:], body) {
   //TODO: parameters
   def jobTimeOutHour = 1
   def defaultLabel = 'maven'
-
+  def label = parameters.get('label')
   return
 
   def label = parameters.get('label', defaultLabel)
