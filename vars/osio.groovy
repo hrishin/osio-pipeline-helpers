@@ -58,10 +58,9 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
 }
 
 def main(params) {
-  node(params.get('label')) {
+  node('clients') {
     checkout scm;
-    println(params.get('label'))
-    return;
+
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
     // TODO: What about if we have multiple DC/IS then we would have to humm improve this
