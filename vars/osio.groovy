@@ -11,7 +11,7 @@ def askForInput() {
 }
 
 
-def deployEnvironment(_environ, application_name, imagestream, route) {
+def deployEnvironment(_environ, target_user, imagestream, route) {
   environ = "-"  + _environ
 
   try {
