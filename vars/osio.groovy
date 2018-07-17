@@ -22,7 +22,7 @@ def deployEnvironment(_environ, target_user, dc, route) {
     error "Error running OpenShift command ${err}"
   }
 
-  openshiftDeploy(deploymentConfig: "${application_name}", namespace: "${target_user}" + environ)
+  openshiftDeploy(deploymentConfig: "${dc}", namespace: "${target_user}" + environ)
 
   try {
     ROUTE_PREVIEW = sh (
