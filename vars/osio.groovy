@@ -85,6 +85,7 @@ def call(Map parameters = [:], body) {
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
         oc delete bc ${templateBC} -n \$i
+        oc delete is ${templateIS} -n \$i
        done
     """
     }
