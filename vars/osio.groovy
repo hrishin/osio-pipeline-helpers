@@ -79,11 +79,11 @@ def call(Map parameters = [:], body) {
        done
 
        #Remove dc from currentUser and
-       oc delete dc ${templateDC} -n ${currentUser}
+       oc delete dc ${templateDC} -n ${currentUser} || true
 
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
-        oc delete bc ${templateBC} -n \$i
+        oc delete bc ${templateBC} -n \$i || true
        done
     """
     }
