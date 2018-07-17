@@ -13,20 +13,20 @@ def askForInput() {
 }
 
 
-def deployEnvironment(_environ, target_user, dc, route) {
+def deployEnvironment(_environ, user, is, dc, route) {
   environ = "-"  + _environ
 
   try {
-    sh "oc tag -n ${target_user}${environ} --alias=true ${target_user}/runtime:latest runtime:latest"
+    sh "oc tag -n ${user}${environ} --alias=true ${user}/runtime:latest runtime:latest"
   } catch (err) {
     error "Error running OpenShift command ${err}"
   }
 
-  openshiftDeploy(deploymentConfig: "${dc}", namespace: "${target_user}" + environ)
+  openshiftDeploy(deploymentConfig: "${dc}", namespace: "${user}" + environ)
 
   try {
     ROUTE_PREVIEW = sh (
-      script: "oc get route -n ${target_user}${environ} ${route} --template 'http://{{.spec.host}}'",
+      script: "oc get route -n ${user}${environ} ${route} --template 'http://{{.spec.host}}'",
       returnStdout: true
     ).trim()
     echo _environ.capitalize() + " URL: ${ROUTE_PREVIEW}"
@@ -65,21 +65,22 @@ def main() {
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
+    templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream")
     templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
       sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
-            oc apply -f- -n \$i || true
+            oc apply -f- -n \$i
        done
 
        #Remove dc from currentUser and
-       oc delete dc ${templateDC} -n ${currentUser} || true
+       oc delete dc ${templateDC} -n ${currentUser}
 
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
-        oc delete bc ${templateBC} -n \$i || true
+        oc delete bc ${templateBC} -n \$i
        done
     """
     }
@@ -90,12 +91,12 @@ def main() {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}", "${templateDC}", "${templateRoute}")
+      deployEnvironment("stage", "${currentUser}", "${templateIS}", "${templateDC}", "${templateRoute}")
       askForInput()
     }
 
     stage('Deploy to Prod') {
-      deployEnvironment("run", "${currentUser}", "${templateDC}", "${templateRoute}")
+      deployEnvironment("run", "${currentUser}", "${templateIS}, ""${templateDC}", "${templateRoute}")
     }
   }
 }
