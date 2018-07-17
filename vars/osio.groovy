@@ -113,10 +113,8 @@ def call(body) {
   //TODO: parameters
   def jobTimeOutHour = 1
   try {
-    timestamps{
-      timeout(time: jobTimeOutHour, unit: 'HOURS') {
-        main(pipelineParams)
-      }
+    timeout(time: jobTimeOutHour, unit: 'HOURS') {
+      main(pipelineParams)
     }
   } catch (err) {
     echo "in catch block"
