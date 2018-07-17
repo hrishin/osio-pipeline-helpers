@@ -53,10 +53,11 @@ def getCurrentRepo() {
 }
 
 def getJsonFromProcessedTemplate(sourceRepository) {
-  return sh (
+  def output = sh (
     script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json",
     returnStdout: true
-    ).trim()
+  ).trim()
+  return new JsonSlurper().parseText(output.trim())
 }
 
 def getNameFromTemplate(json, type) {
