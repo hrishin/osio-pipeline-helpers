@@ -93,6 +93,10 @@ def main() {
       deployEnvironment("stage", "${currentUser}", "${templateDC}", "${templateRoute}")
       askForInput()
     }
+
+    stage('Deploy to Prod') {
+      deployEnvironment("run", "${currentUser}", "${templateDC}", "${templateRoute}")
+    }
   }
 }
 
