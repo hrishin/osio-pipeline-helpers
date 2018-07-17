@@ -69,8 +69,6 @@ def call(Map parameters = [:], body) {
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
 
-    sleep(time: 10, unit: "MINUTES")
-
     sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
