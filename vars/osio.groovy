@@ -54,7 +54,7 @@ def getCurrentRepo() {
 
 def getJsonFromTemplate(sourceRepository) {
   return sh (
-    script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json",
+    script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository}",
     returnStdout: true
     ).trim()
 }
