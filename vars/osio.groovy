@@ -57,8 +57,8 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
     ).trim()
 }
 
-def main() {
-  node('nodejs') {
+def main(label) {
+  node(label) {
     checkout scm;
 
     currentUser = getCurrentUser()
@@ -105,16 +105,18 @@ def main() {
 def call(Map parameters = [:], body) {
   //TODO: parameters
   def jobTimeOutHour = 1
+  def defaultLabel = 'maven'
 
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
 
+  def label = parameters.get('label', defaultLabel)
 
   try {
     timestamps{
       timeout(time: jobTimeOutHour, unit: 'HOURS') {
-        main()
+        main(label)
       }
     }
   } catch (err) {
