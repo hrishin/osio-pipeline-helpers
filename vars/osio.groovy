@@ -52,7 +52,9 @@ def getCurrentRepo() {
 
 def getTemplateNameFromObject(sourceRepository, objectName) {
   return sh (
-    script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o jsonpath='{.items[?(@.kind == \"${objectName}\")].metadata.name}'",
+    script: """
+oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json | python -c 'import sys, json; blob = json.load(sys.stdin);print(" ".join([x["metadata"]["name"] for x in blob["items"] if x["kind"] == "${objectName}" and not x["metadata"]["name"].startswith("runtime")]))''
+""",
     returnStdout: true
     ).trim()
 }
@@ -66,7 +68,7 @@ def main(params) {
     // TODO: What about if we have multiple DC/IS then we would have to humm improve this
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
-    templateISDest = getTemplateNameFromObject(currentGitRepo, "ImageStream").replaceAll(/runtime[^\s$]+\s+/, "")
+    templateISDest = getTemplateNameFromObject(currentGitRepo, "ImageStream").replaceAll(/runtime[^\s$]+\s+/)
     templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
