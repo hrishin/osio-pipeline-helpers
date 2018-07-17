@@ -11,7 +11,7 @@ def askForInput() {
 }
 
 
-def deployEnvironment(_environ, application_name, imagestream) {
+def deployEnvironment(_environ, application_name, imagestream, route) {
   environ = "-"  + _environ
 
   try {
@@ -24,7 +24,7 @@ def deployEnvironment(_environ, application_name, imagestream) {
 
   try {
     ROUTE_PREVIEW = sh (
-      script: "oc get route -n ${target_user}${environ} ${application_name} --template 'http://{{.spec.host}}'",
+      script: "oc get route -n ${target_user}${environ} ${route} --template 'http://{{.spec.host}}'",
       returnStdout: true
     ).trim()
     echo _environ.capitalize() + " URL: ${ROUTE_PREVIEW}"
@@ -68,6 +68,7 @@ def call(Map parameters = [:], body) {
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
     templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream")
+    templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
       sh """
@@ -92,7 +93,7 @@ def call(Map parameters = [:], body) {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}", "${templateIS}")
+      deployEnvironment("stage", "${currentUser}", "${templateIS}", "${templateRoute}")
       //askForInput()
     }
   }
