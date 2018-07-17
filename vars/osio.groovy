@@ -58,7 +58,7 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
 }
 
 def main(label) {
-  node(label) {
+  node(params.get(label)) {
     checkout scm;
 
     currentUser = getCurrentUser()
@@ -111,15 +111,13 @@ def call(body) {
   body()
 
   def label = pipelineParams.get('label', 'maven')
-  println(label)
-  return
 
   //TODO: parameters
   def jobTimeOutHour = 1
   try {
     timestamps{
       timeout(time: jobTimeOutHour, unit: 'HOURS') {
-        main(label)
+        main(params)
       }
     }
   } catch (err) {
