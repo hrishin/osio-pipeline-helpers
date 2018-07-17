@@ -58,7 +58,7 @@ def getTemplateNameFromObject(sourceRepository, objectName) {
 }
 
 def main(params) {
-  node('clients') {
+  node {
     checkout scm;
 
     currentUser = getCurrentUser()
