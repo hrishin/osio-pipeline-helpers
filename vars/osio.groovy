@@ -71,6 +71,8 @@ def main(label) {
 
     stage('Creating configuration') {
       sh """
+       set -e -u
+
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
             oc apply -f- -n \$i
@@ -106,13 +108,12 @@ def call(Map parameters = [:], body) {
   //TODO: parameters
   def jobTimeOutHour = 1
   def defaultLabel = 'maven'
-  def label = parameters.get('label')
 
-  def stages = parameters.get('stage')
-  println("Label: ${defaultLabel}")
-  println("Label: ${label}")
-  println("Parameters: ${stages}")
-  return
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+
+  def label = parameters.get('label', defaultLabel)
 
   try {
     timestamps{
