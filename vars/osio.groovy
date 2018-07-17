@@ -60,6 +60,7 @@ def call(Map parameters = [:], body) {
     echo "${config}"
     currentUser = getCurrentUser()
     currentGitRepo = getCurrentRepo()
+    sleep(time: 10, unit: "MINUTES")
 
     sh """
        for i in ${currentUser} ${currentUser}-{stage,run};do
