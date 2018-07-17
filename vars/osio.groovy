@@ -71,7 +71,8 @@ def main(params) {
 
     stage('Creating configuration') {
       sh """
-       set -e -u
+       set -u
+       set -e
 
        for i in ${currentUser} ${currentUser}-{stage,run};do
           oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${currentGitRepo} | \
