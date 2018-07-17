@@ -53,7 +53,7 @@ def getCurrentRepo() {
 def getTemplateNameFromObject(sourceRepository, objectName) {
   return sh (
     script: """
-oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json | python -c 'import sys, json; blob = json.load(sys.stdin);print(" ".join([x["metadata"]["name"] for x in blob["items"] if x["kind"] == "${objectName}" and not x["metadata"]["name"].startswith("runtime")]))''
+oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json | python -c 'import sys, json; blob = json.load(sys.stdin);print(" ".join([x["metadata"]["name"] for x in blob["items"] if x["kind"] == "${objectName}" and not x["metadata"]["name"].startswith("runtime")]))'
 """,
     returnStdout: true
     ).trim()
