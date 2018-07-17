@@ -11,11 +11,11 @@ def askForInput() {
 }
 
 
-def deployEnvironment(_environ, target_user, imagestream, route) {
+def deployEnvironment(_environ, target_user, route) {
   environ = "-"  + _environ
 
   try {
-    sh "oc tag -n ${target_user}${environ} --alias=true ${target_user}/${imagestream}:latest ${imagestream}:latest"
+    sh "oc tag -n ${target_user}${environ} --alias=true ${target_user}/runtime:latest runtime:latest"
   } catch (err) {
     error "Error running OpenShift command ${err}"
   }
@@ -69,7 +69,6 @@ def call(Map parameters = [:], body) {
     currentGitRepo = getCurrentRepo()
     templateDC = getTemplateNameFromObject(currentGitRepo, "DeploymentConfig")
     templateBC = getTemplateNameFromObject(currentGitRepo, "BuildConfig")
-    templateIS = getTemplateNameFromObject(currentGitRepo, "ImageStream")
     templateRoute = getTemplateNameFromObject(currentGitRepo, "Route")
 
     stage('Creating configuration') {
@@ -85,7 +84,6 @@ def call(Map parameters = [:], body) {
        #TODO(make it smarter)
        for i in ${currentUser}-{stage,run};do
         oc delete bc ${templateBC} -n \$i
-        oc delete is ${templateIS} -n \$i
        done
     """
     }
@@ -96,7 +94,7 @@ def call(Map parameters = [:], body) {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}", "${templateIS}", "${templateRoute}")
+      deployEnvironment("stage", "${currentUser}", "${templateRoute}")
       //askForInput()
     }
   }
