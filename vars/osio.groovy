@@ -50,14 +50,40 @@ def getCurrentRepo() {
     ).trim()
 }
 
-def getTemplateNameFromObject(sourceRepository, objectName) {
+def getJsonFromTemplate(sourceRepository) {
   return sh (
     script: """
-oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json | python -c 'import sys, json; blob = json.load(sys.stdin);print(" ".join([x["metadata"]["name"] for x in blob["items"] if x["kind"] == "${objectName}" and not x["metadata"]["name"].startswith("runtime")]))'
+oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json
 """,
     returnStdout: true
     ).trim()
 }
+
+def getNameFromTemplate(json, type) {
+  def r = json.items.findResults { i ->
+    i.kind == type ?
+      i.metadata.name :
+      null
+  }
+
+  // For ImageStream we need to filter out the runtime stuff
+  if (type == "ImageStream") {
+    r = r.findResults { i ->
+      !i.startsWith("runtime") ?
+      i :
+      null
+    }
+  }
+
+  if (r.size() == 0) {
+    throw new Exception("We didn't find any ${type}")
+  }
+  if (r.size() > 1) {
+    throw new Exception("There should be only one ${type} we have: ${r}")
+  }
+  return r[0]
+}
+
 
 def main(params) {
   node {
