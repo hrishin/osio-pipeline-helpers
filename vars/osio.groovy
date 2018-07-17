@@ -75,7 +75,7 @@ def main() {
             oc apply -f- -n \$i
        done
 
-       #Remove dc from currentUser and
+       #Remove dc from currentUser
        oc delete dc ${templateDC} -n ${currentUser}
 
        #TODO(make it smarter)
@@ -96,7 +96,7 @@ def main() {
     }
 
     stage('Deploy to Prod') {
-      deployEnvironment("run", "${currentUser}", "${templateIS}, ""${templateDC}", "${templateRoute}")
+      deployEnvironment("run", "${currentUser}", "${templateIS}", "${templateDC}", "${templateRoute}")
     }
   }
 }
