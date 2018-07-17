@@ -105,13 +105,18 @@ def main(label) {
 def call(Map parameters = [:], body) {
   //TODO: parameters
   def jobTimeOutHour = 1
-  def defaultLabel = 'maven'
+  def defaultLabel = buildId('maven')
 
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
 
   def label = parameters.get('label', defaultLabel)
+
+  def stages = parameters.get('stage')
+  println("Label: ${defaultLabel}")
+  println("Label: ${label}")
+  println("Parameters: ${stages}")
 
   try {
     timestamps{
