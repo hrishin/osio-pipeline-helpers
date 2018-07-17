@@ -14,7 +14,7 @@ def askForInput() {
 }
 
 
-def deployEnvironment(_environ, target_user, route) {
+def deployEnvironment(_environ, target_user, dc, route) {
   environ = "-"  + _environ
 
   try {
@@ -91,7 +91,7 @@ def main() {
 
 
     stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}", "${templateRoute}")
+      deployEnvironment("stage", "${currentUser}", "${templateDC}", "${templateRoute}")
       askForInput()
     }
   }
