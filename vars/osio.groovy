@@ -84,10 +84,10 @@ def getNameFromTemplate(json, type) {
   return r[0]
 }
 
-def getEnvironments() {
+def getEnvironments(ns) {
   def environments = [:]
   output = sh (
-    script: "oc extract configmap/fabric8-environments --to=-",
+    script: "oc -n ${ns} extract configmap/fabric8-environments --to=-",
     returnStdout: true
   ).trim()
 
@@ -107,8 +107,6 @@ def getEnvironments() {
 def main(params) {
   checkout scm;
 
-  println getEnvironments()
-  return
 
   if (!fileExists('.openshiftio/application.yaml')) {
     println("File not found: .openshiftio/application.yaml")
@@ -118,6 +116,9 @@ def main(params) {
 
   currentUser = getCurrentUser()
   currentGitRepo = getCurrentRepo()
+
+  println getEnvironments(currentUser)
+  return
 
   json = getJsonFromProcessedTemplate(currentGitRepo)
   templateDC = getNameFromTemplate(json, "DeploymentConfig")
