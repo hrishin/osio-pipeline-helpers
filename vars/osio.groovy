@@ -92,7 +92,7 @@ def getNamespaceForStage(stage) {
 def main(params) {
   checkout scm;
 
-  File yamlFile = new File( ".openshiftio/application.yaml" )
+  File yamlFile = new File( "./.openshiftio/application.yaml" )
   if( !yamlFile.exists() ) {
     println("File not found: .openshiftio/application.yaml")
     currentBuild.result = 'FAILURE'
