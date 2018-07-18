@@ -87,7 +87,7 @@ def getNameFromTemplate(json, type) {
 
 
 def main(params) {
-  node('clients') {
+  node('builder-clients') {
     checkout scm;
 
     currentUser = getCurrentUser()
