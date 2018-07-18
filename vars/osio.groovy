@@ -101,12 +101,12 @@ def main(params) {
   templateISDest = getNameFromTemplate(json, "ImageStream")
   templateRoute = getNameFromTemplate(json, "Route")
 
-  File theInfoFile = new File( ".openshiftio/application.yaml" )
-  if( !theInfoFile.exists() ) {
-    throw new Exception("File not found: .openshiftio/application.yaml")
-  }
-
   stage('Processing Template') {
+    File theInfoFile = new File( ".openshiftio/application.yaml" )
+    if( !theInfoFile.exists() ) {
+      throw new Exception("File not found: .openshiftio/application.yaml")
+    }
+
     sh """
        set -u
        set -e
