@@ -98,7 +98,8 @@ def main(params) {
     templateBC = getNameFromTemplate(json, "BuildConfig")
     templateISDest = getNameFromTemplate(json, "ImageStream")
     templateRoute = getNameFromTemplate(json, "Route")
-
+    println "Stages: " + params.get('stage')
+    return
     stage('Processing Template') {
       sh """
        set -u
