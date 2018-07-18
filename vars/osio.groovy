@@ -40,7 +40,7 @@ def deployEnvironment(_environ, user, is, dc, route) {
 
 def getCurrentUser() {
   return sh (
-    script: "oc whoami",
+    script: "oc whoami|sed 's/.*:\(.*\)-jenkins:.*/\1/'",
     returnStdout: true
     ).trim()
 }
