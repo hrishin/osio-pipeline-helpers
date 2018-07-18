@@ -87,7 +87,7 @@ def getNameFromTemplate(json, type) {
 
 
 def main(params) {
-  node {
+  node('clients') {
     checkout scm;
 
     currentUser = getCurrentUser()
@@ -99,7 +99,7 @@ def main(params) {
     templateISDest = getNameFromTemplate(json, "ImageStream")
     templateRoute = getNameFromTemplate(json, "Route")
 
-    stage('Creating configuration') {
+    stage('Processing Template') {
       sh """
        set -u
        set -e
@@ -122,7 +122,6 @@ def main(params) {
     stage('Building application') {
       openshiftBuild(buildConfig: "${templateBC}", showBuildLogs: 'true')
     }
-
 
     stage('Deploy to staging') {
       deployEnvironment("stage", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
