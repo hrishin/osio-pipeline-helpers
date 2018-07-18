@@ -146,7 +146,7 @@ def call(body) {
 
   try {
     timeout(time: jobTimeOutHour, unit: 'HOURS') {
-      node(params.get(defaultBuilder)) {
+      node(pipelineParams.get(defaultBuilder)) {
         main(pipelineParams)
       }
     }
