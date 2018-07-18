@@ -87,7 +87,7 @@ def getNameFromTemplate(json, type) {
 def getEnvironments(ns) {
   def environments = [:]
   output = sh (
-    script: "oc -n ${ns} extract configmap/fabric8-environments --to=- > /tmp/output.tmp",
+    script: "oc -n ${ns} extract configmap/fabric8-environments --to=-",
   )
 
   readFile("/tmp/output.tmp").trim().eachLine{line ->
