@@ -90,7 +90,7 @@ def getEnvironments(ns) {
     script: "oc -n ${ns} extract configmap/fabric8-environments --to=-",
     returnStdout: true
   ).trim()
-  println output.split("\r\n")
+  println output.split("\r?\n")
 
   // output.eachLine{line ->
   //   println(line)
