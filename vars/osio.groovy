@@ -92,6 +92,14 @@ def getNamespaceForStage(stage) {
 def main(params) {
   checkout scm;
 
+  File theInfoFile = new File( ".openshiftio/application.yaml" )
+  if( !theInfoFile.exists() ) {
+    println("File not found: .openshiftio/application.yaml")
+    currentBuild.result = 'FAILURE'
+    return
+  }
+
+
   currentUser = getCurrentUser()
   currentGitRepo = getCurrentRepo()
 
@@ -102,13 +110,6 @@ def main(params) {
   templateRoute = getNameFromTemplate(json, "Route")
 
   stage('Processing Template') {
-    File theInfoFile = new File( ".openshiftio/application.yaml" )
-    if( !theInfoFile.exists() ) {
-      println("File not found: .openshiftio/application.yaml")
-      currentBuild.result = 'FAILURE'
-      return
-    }
-
     sh """
        set -u
        set -e
