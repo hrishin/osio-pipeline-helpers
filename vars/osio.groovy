@@ -97,7 +97,7 @@ def main(params) {
   templateBC = getNameFromTemplate(json, "BuildConfig")
   templateISDest = getNameFromTemplate(json, "ImageStream")
   templateRoute = getNameFromTemplate(json, "Route")
-  println "Stages: " + params.get('stage')
+  println "Stages: " + params.get('stages')
   return
   stage('Processing Template') {
     sh """
