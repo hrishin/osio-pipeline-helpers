@@ -87,7 +87,6 @@ def getNameFromTemplate(json, type) {
 
 
 def main(params) {
-  node(params.get('nodejs')) {
     checkout scm;
 
     currentUser = getCurrentUser()
@@ -132,20 +131,24 @@ def main(params) {
     stage('Deploy to Prod') {
       deployEnvironment("run", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
     }
-  }
+
 }
 
 def call(body) {
+  //TODO: parameters
+  def jobTimeOutHour = 1
+  def defaultBuilder = 'nodejs'
+
   def pipelineParams= [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = pipelineParams
   body()
 
-  //TODO: parameters
-  def jobTimeOutHour = 1
   try {
     timeout(time: jobTimeOutHour, unit: 'HOURS') {
-      main(pipelineParams)
+      node(params.get(defaultBuilder)) {
+        main(pipelineParams)
+      }
     }
   } catch (err) {
     echo "in catch block"
