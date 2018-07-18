@@ -84,13 +84,31 @@ def getNameFromTemplate(json, type) {
   return r[0]
 }
 
-def getNamespaceForStage(stage) {
+def getEnvironments() {
+  def environments = [:]
+  output = sh (
+    script: "oc extract configmap/fabric8-environments --to=-",
+    returnStdout: true
+  ).trim()
 
+  output.eachLine{line ->
+    if (line.startsWith("name:")) {
+      name = line.trim().replace("name: ", "").toLowerCase()
+    }
+    if (line.startsWith("namespace:")) {
+      namespace = line.trim().replace("namespace: ", "")
+      environments[name] = namespace
+    }
+  }
+  return environments
 }
 
 
 def main(params) {
   checkout scm;
+
+  println getEnvironments()
+  return
 
   if (!fileExists('.openshiftio/application.yaml')) {
     println("File not found: .openshiftio/application.yaml")
