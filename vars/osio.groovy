@@ -1,11 +1,4 @@
 import groovy.json.JsonSlurperClassic
-import io.fabric8.kubernetes.client.DefaultKubernetesClient
-
-@NonCPS
-String getNamespace() {
-    KubernetesClient client = new DefaultKubernetesClient()
-    return client.getNamespace()
-}
 
 def askForInput() {
   //TODO: parameters
