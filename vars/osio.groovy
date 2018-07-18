@@ -87,11 +87,10 @@ def getNameFromTemplate(json, type) {
 def getEnvironments(ns) {
   def environments = [:]
   output = sh (
-    script: "oc -n ${ns} extract configmap/fabric8-environments --to=-",
-    returnStdout: true
-  ).trim().split("\r?\n")
-  println output
-  output.eachLine{line ->
+    script: "oc -n ${ns} extract configmap/fabric8-environments --to=- > /tmp/output.tmp",
+  )
+
+  readFile("/tmp/output.tmp").trim().eachLine{line ->
     println(output)
     if (line.startsWith("name:")) {
       name = line.trim().replace("name: ", "").toLowerCase()
