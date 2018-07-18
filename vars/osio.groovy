@@ -66,7 +66,6 @@ def getNameFromTemplate(json, type) {
       i.metadata.name :
       null
   }
-
   // For ImageStream we need to filter out the runtime stuff
   if (type == "ImageStream") {
     r = r.findResults { i ->
@@ -85,6 +84,10 @@ def getNameFromTemplate(json, type) {
   return r[0]
 }
 
+def getNamespaceForStage(stage) {
+
+}
+
 
 def main(params) {
   checkout scm;
@@ -97,8 +100,12 @@ def main(params) {
   templateBC = getNameFromTemplate(json, "BuildConfig")
   templateISDest = getNameFromTemplate(json, "ImageStream")
   templateRoute = getNameFromTemplate(json, "Route")
-  println "Stages: " + params.get('stages')
-  return
+
+  File theInfoFile = new File( ".openshiftio/application.yaml" )
+  if( !theInfoFile.exists() ) {
+    throw new Exception("File not found: .openshiftio/application.yaml")
+  }
+
   stage('Processing Template') {
     sh """
        set -u
