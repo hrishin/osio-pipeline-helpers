@@ -84,7 +84,6 @@ def getNameFromTemplate(json, type) {
   return r[0]
 }
 
-@NonCPS // has to be NonCPS or the build breaks on the call to .each
 def getEnvironments(ns) {
   def environments = [:]
   output = sh (
