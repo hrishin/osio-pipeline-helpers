@@ -92,7 +92,7 @@ def getEnvironments(ns) {
     returnStdout: true
   ).trim()
 
-  readFile("/tmp/output.tmp").trim().eachLine{line ->
+  output.eachLine{line ->
     println(output)
     if (line.startsWith("name:")) {
       name = line.trim().replace("name: ", "").toLowerCase()
