@@ -93,16 +93,16 @@ def getEnvironments(ns) {
   ).trim()
   println output.split("\n")
 
-  output.eachLine{line ->
-    println(line)
-    if (line.startsWith("name:")) {
-      name = line.trim().replace("name: ", "").toLowerCase()
-    }
-    if (line.startsWith("namespace:")) {
-      namespace = line.trim().replace("namespace: ", "")
-      environments[name] = namespace
-    }
-  }
+  // output.eachLine{line ->
+  //   println(line)
+  //   if (line.startsWith("name:")) {
+  //     name = line.trim().replace("name: ", "").toLowerCase()
+  //   }
+  //   if (line.startsWith("namespace:")) {
+  //     namespace = line.trim().replace("namespace: ", "")
+  //     environments[name] = namespace
+  //   }
+  // }
   return environments
 }
 
