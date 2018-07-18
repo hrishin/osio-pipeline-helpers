@@ -104,7 +104,9 @@ def main(params) {
   stage('Processing Template') {
     File theInfoFile = new File( ".openshiftio/application.yaml" )
     if( !theInfoFile.exists() ) {
-      throw new Exception("File not found: .openshiftio/application.yaml")
+      println("File not found: .openshiftio/application.yaml")
+      currentBuild.result = 'FAILURE'
+      return
     }
 
     sh """
