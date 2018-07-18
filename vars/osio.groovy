@@ -1,4 +1,4 @@
-import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 def askForInput() {
   //TODO: parameters
@@ -57,7 +57,7 @@ def getJsonFromProcessedTemplate(sourceRepository) {
     script: "oc process -f .openshiftio/application.yaml SOURCE_REPOSITORY_URL=${sourceRepository} -o json",
     returnStdout: true
   ).trim()
-  return new JsonSlurper().parseText(output.trim())
+  return new groovy.json.JsonSlurperClassic().parseText(output.trim())
 }
 
 def getNameFromTemplate(json, type) {
