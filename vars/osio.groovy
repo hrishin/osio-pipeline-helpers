@@ -93,7 +93,7 @@ def main(params) {
   checkout scm;
 
   File yamlFile = new File( ".openshiftio/application.yaml" )
-  if( !yaml.exists() ) {
+  if( !yamlFile.exists() ) {
     println("File not found: .openshiftio/application.yaml")
     currentBuild.result = 'FAILURE'
     return
