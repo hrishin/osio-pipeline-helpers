@@ -122,7 +122,6 @@ def main(params) {
   currentGitRepo = getCurrentRepo()
 
   println getEnvironments(currentUser)
-  return
 
   json = getJsonFromProcessedTemplate(currentGitRepo)
   templateDC = getNameFromTemplate(json, "DeploymentConfig")
