@@ -92,8 +92,7 @@ def getNamespaceForStage(stage) {
 def main(params) {
   checkout scm;
 
-  exists =
-  if( fileExists './.openshiftio/application.yaml' ) {
+  if( ! fileExists '.openshiftio/application.yaml' ) {
     println("File not found: .openshiftio/application.yaml")
     currentBuild.result = 'FAILURE'
     return
