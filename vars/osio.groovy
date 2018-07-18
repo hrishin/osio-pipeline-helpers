@@ -87,20 +87,20 @@ def getNameFromTemplate(json, type) {
 
 
 def main(params) {
-    checkout scm;
+  checkout scm;
 
-    currentUser = getCurrentUser()
-    currentGitRepo = getCurrentRepo()
+  currentUser = getCurrentUser()
+  currentGitRepo = getCurrentRepo()
 
-    json = getJsonFromProcessedTemplate(currentGitRepo)
-    templateDC = getNameFromTemplate(json, "DeploymentConfig")
-    templateBC = getNameFromTemplate(json, "BuildConfig")
-    templateISDest = getNameFromTemplate(json, "ImageStream")
-    templateRoute = getNameFromTemplate(json, "Route")
-    println "Stages: " + params.get('stage')
-    return
-    stage('Processing Template') {
-      sh """
+  json = getJsonFromProcessedTemplate(currentGitRepo)
+  templateDC = getNameFromTemplate(json, "DeploymentConfig")
+  templateBC = getNameFromTemplate(json, "BuildConfig")
+  templateISDest = getNameFromTemplate(json, "ImageStream")
+  templateRoute = getNameFromTemplate(json, "Route")
+  println "Stages: " + params.get('stage')
+  return
+  stage('Processing Template') {
+    sh """
        set -u
        set -e
 
@@ -117,20 +117,20 @@ def main(params) {
         oc delete bc ${templateBC} -n \$i
        done
     """
-    }
+  }
 
-    stage('Building application') {
-      openshiftBuild(buildConfig: "${templateBC}", showBuildLogs: 'true')
-    }
+  stage('Building application') {
+    openshiftBuild(buildConfig: "${templateBC}", showBuildLogs: 'true')
+  }
 
-    stage('Deploy to staging') {
-      deployEnvironment("stage", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
-      askForInput()
-    }
+  stage('Deploy to staging') {
+    deployEnvironment("stage", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
+    askForInput()
+  }
 
-    stage('Deploy to Prod') {
-      deployEnvironment("run", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
-    }
+  stage('Deploy to Prod') {
+    deployEnvironment("run", "${currentUser}", "${templateISDest}", "${templateDC}", "${templateRoute}")
+  }
 
 }
 
