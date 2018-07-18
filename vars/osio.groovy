@@ -98,7 +98,6 @@ def main(params) {
     return
   }
 
-
   currentUser = getCurrentUser()
   currentGitRepo = getCurrentRepo()
 
