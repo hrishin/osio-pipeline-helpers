@@ -1,7 +1,5 @@
 import groovy.json.JsonSlurperClassic
 
-def DEFAULT_BUILDER = 'nodejs'
-
 def askForInput() {
   //TODO: parameters
   def approvalTimeOutMinutes = 30;
@@ -89,7 +87,7 @@ def getNameFromTemplate(json, type) {
 
 
 def main(params) {
-  node(params.get('label', DEFAULT_BUILDER)) {
+  node(params.get('nodejs')) {
     checkout scm;
 
     currentUser = getCurrentUser()
